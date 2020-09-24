@@ -1,21 +1,25 @@
 <template>
-    <b-sidebar id="example-sidebar" title="Sidebar" shadow>
-      <div class="px-3 py-2">
-        {{this.$store.getters.results}}
-        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
-        in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-      </div>
-    </b-sidebar>
+  <b-sidebar :id="'movie-' + id" :title="title" shadow>
+    <div class="px-3 py-2">
+      <p>
+        <Resume :desc="description" />
+      </p>
+    </div>
+  </b-sidebar>
 </template>
 
 <script>
-    export default {
-        name: 'Sidebar',
-        props: {
-            id: Number
-            // imgName: String,
-            // title: String,
-            // description: String,
-        },   
-    }
+import Resume from "@/components/Resume";
+
+export default {
+  name: "Sidebar",
+  props: {
+    id: Number,
+    description: String,
+    title: String
+  },
+  components: {
+    Resume
+  }
+};
 </script>

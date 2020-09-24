@@ -6,11 +6,11 @@
 
 <style lang="scss">
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
-body{
+body {
   background-color: transparent;
 }
-html{
-  background:url("./assets/bg-movilick.jpg") no-repeat center center fixed; 
+html {
+  background: url("./assets/bg-movilick.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -23,7 +23,6 @@ html{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  ;
 }
 
 #nav {

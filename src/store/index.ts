@@ -5,20 +5,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    results: Number
+    title: String
   },
   getters: {
-    results: state => state.results
+    title: state => state.title
   },
   mutations: {
-    SAVE_ID_MOVIE: (state, result) => {
-      state.results = result;
+    TITLE_NAME: (state, title) => {
+      state.title = title;
     }
   },
-  // actions: {
-  //   setMovie({state}, data){
-  //     commit('ADD_MOVIE', data)
-  //   }
-  // },
   modules: {}
 });
