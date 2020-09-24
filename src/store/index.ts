@@ -4,22 +4,21 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  // state: {
-  //   results: []
-  // },
-  // getters: {
-  //   results: state => state.results
-  // },
-  // mutations: {
-  //   ADD_MOVIE: (state, result: Object) => {
-      // state.results = result;
-      // state.results.push(result) 
+  state: {
+    results: Number
+  },
+  getters: {
+    results: state => state.results
+  },
+  mutations: {
+    SAVE_ID_MOVIE: (state, result) => {
+      state.results = result;
+    }
+  },
+  // actions: {
+  //   setMovie({state}, data){
+  //     commit('ADD_MOVIE', data)
   //   }
   // },
-  // actions: {
-    // setMovie({state}, data){
-    //   commit('ADD_MOVIE', data)
-    // }
-  // },
-  // modules: {}
+  modules: {}
 });
