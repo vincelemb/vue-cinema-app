@@ -8,18 +8,19 @@
   </b-sidebar>
 </template>
 
-<script>
-import Resume from "@/components/Resume";
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+import Resume from "@/components/Resume.vue";
 
-export default {
+@Component({
   name: "Sidebar",
-  props: {
-    id: Number,
-    description: String,
-    title: String
-  },
   components: {
     Resume
   }
-};
+})
+export default class Sidebar extends Vue {
+  @Prop(Number) private id?: number;
+  @Prop(String) private description?: string;
+  @Prop(String) private title?: string;
+}
 </script>

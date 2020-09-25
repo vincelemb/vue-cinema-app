@@ -11,11 +11,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "Resume",
-  props: {
-    desc: String
-  }
-};
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+
+@Component({
+  name: "Resume"
+})
+export default class Resume extends Vue {
+  @Prop(String) private desc!: string;
+}
 </script>

@@ -26,31 +26,39 @@
   </b-container>
 </template>
 
-<script>
+<script lang="ts">
 import axios from "axios";
 import Card from "@/components/Card.vue";
+import { State, Action, Getter, namespace } from 'vuex-class';
+import Component from 'vue-class-component';
+import { MovieState } from '../store/movie/types';
+import { Vue, Prop } from "vue-property-decorator";
+import { movie } from '@/store/movie';
+import { mutations } from '@/store/movie/mutations';
+const movieModule = namespace('movie')
 
-export default {
-  data: () => ({
-    results: Object,
-    query: ""
-  }),
+@Component({
+  name: "Form",
   components: {
     Card
-  },
-  methods: {
-    getResult(query) {
-      axios
-        .get(
-          `https://api.themoviedb.org/3/search/multi?api_key=6e9ac46c8849c6aa826907b490ecfc1f&language=en-US&query=${query}&page=1&include_adult=false`
-        )
-        .then(response => {
-          this.results = response.data.results;
-        });
-      // this.results.map((result) => {
-      //   this.$store.commit("TITLE_NAME", this.results.titl)
-      // })
-    }
   }
-};
+})
+export default class Form extends Vue {
+  @Prop({ default: "" }) private query?: string;
+
+  private results: Object[] = [];
+  private getResult(query: string) {
+    axios
+      .get(
+        `https://api.themoviedb.org/3/search/multi?api_key=6e9ac46c8849c6aa826907b490ecfc1f&language=en-US&query=${query}&page=1&include_adult=false`
+      )
+      .then(response => {
+        this.results = response.data.results;
+      });
+    this.results.map((result: object ) => {
+      @movieModule.Mutation('MOVIE_INFO', result.title)
+      // this.$store.commit("TITLE_NAME", result.title)
+    });
+  }
+}
 </script>
