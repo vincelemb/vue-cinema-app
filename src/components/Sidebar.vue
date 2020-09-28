@@ -21,6 +21,6 @@ import Resume from "@/components/Resume.vue";
 export default class Sidebar extends Vue {
   @Prop(Number) private id?: number;
   @Prop(String) private description?: string;
-  @Prop(String) private title?: string;
+  @Prop(String) private title?: any;
 }
 </script>

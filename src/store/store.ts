@@ -1,28 +1,48 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
-import ToDoModel from './models/movieModel';
 
-//WIP : Passage dans un seul store : https://medium.com/@RupaniChirag/vuex-with-typescript-b83a62aa48a8
-Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
-    movieInfo: String
-    // todos: Array<ToDoModel>()
-  },
+// interface movieType { 
+//     movieInfo:Object,
+//     title: string,
+//   }
 
-  mutations: {
-    MOVIE_INFO: (state, todoModel: ToDoModel) => {
-    //   state.movieInfo.push(todoModel);
-      state.movieInfo = 'todoModel'
+export const state = Vue.observable({ // this is the magic
+    movieInfo: {
+        id: [0],
+        title: [''],
+        description: 'red'
     }
-    // addToDo(state, todoModel: ToDoModel) {
-    //   state.todos.push(todoModel);
-    // }
-  },
-  actions: {
-    MOVIE_INFO(context, todoModel: ToDoModel) {
-      context.commit('MOVIE_INFO', todoModel);
-    }
-  }
 });
+
+// export const getters: any = {
+//     title: () => { return state.title },
+    // description: () => state.description
+// }
+
+/**
+ * Mutation change state
+ * @param {string} val - set title value to change state  
+ * @param {string} val - set description value to change state 
+ */
+export const mutations: any = {
+    setTitle: (val: string) => state.movieInfo.title.push(val),
+    setId: (id: number) => state.movieInfo.id.push(id),
+    setDescription: (val: string) => state.movieInfo.description = val
+}
+
+/**
+ * Actions calls mutation 
+ * @param {string} val - commit title value to change state  
+ * @param {string} val - commit description value value to change state 
+ */
+export const actions: any = {
+    title(val: string) {
+        return mutations.setTitle(val);
+    },
+    id(id: number) {
+        return mutations.setId(id);
+    },
+    description(val: string) {
+        return mutations.setDescription(val);
+    }
+}

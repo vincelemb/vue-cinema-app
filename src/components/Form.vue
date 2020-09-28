@@ -29,13 +29,10 @@
 <script lang="ts">
 import axios from "axios";
 import Card from "@/components/Card.vue";
-import { State, Action, Getter, namespace } from 'vuex-class';
-import Component from 'vue-class-component';
-import { MovieState } from '../store/movie/types';
+import { State, Action, Getter, namespace } from "vuex-class";
+import Component from "vue-class-component";
 import { Vue, Prop } from "vue-property-decorator";
-import { movie } from '@/store/movie';
-import { mutations } from '@/store/movie/mutations';
-const movieModule = namespace('movie')
+import { mutations, actions } from "../store/store";
 
 @Component({
   name: "Form",
@@ -44,9 +41,9 @@ const movieModule = namespace('movie')
   }
 })
 export default class Form extends Vue {
-  @Prop({ default: "" }) private query?: string;
+  private results: Record<string, any> = [];
+  private query?: string;
 
-  private results: Object[] = [];
   private getResult(query: string) {
     axios
       .get(
@@ -55,10 +52,11 @@ export default class Form extends Vue {
       .then(response => {
         this.results = response.data.results;
       });
-    this.results.map((result: object ) => {
-      @movieModule.Mutation('MOVIE_INFO', result.title)
-      // this.$store.commit("TITLE_NAME", result.title)
-    });
+    // this.results.map((result: Record<string, any>) => {
+
+    //   actions.title(result.original_title);
+    
+    // });
   }
 }
 </script>
