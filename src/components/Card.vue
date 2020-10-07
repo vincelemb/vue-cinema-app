@@ -1,9 +1,18 @@
 <template>
-  <div>
-    <b-overlay :show="show" rounded="sm" @shown="onShown" @hidden="onHidden">
+  <div @mouseleave="show = false" class="m-2">
+    <b-overlay
+      ref="show"
+      :show="show"
+      rounded="sm"
+      @shown="onShown"
+      @hidden="onHidden"
+      variant="dark"
+      opacity="0.70"
+      blur="5px"
+    >
       <b-card
-      @mouseover="show = true"
-      @mouseleave="show = false"
+        ref="cancel"
+        @mouseover="show = true"
         :aria-hidden="show ? 'true' : null"
         overlay
         img-top
@@ -11,40 +20,41 @@
         :img-src="'http://image.tmdb.org/t/p/w500/' + imgName"
         tag="article"
         style="max-width: 20rem; card"
-        class="m-2"
       >
         <b-card-title>{{ title }}</b-card-title>
-        <b-button ref="show" :disabled="show" variant="primary" >
-          Show overlay
-        </b-button>
       </b-card>
 
-        <template v-slot:overlay>
-          <div class="text-center">
-            <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
-            <p id="cancel-label">Please wait...</p>
-            <b-button
-              ref="cancel"
-              variant="outline-danger"
-              size="sm"
-              aria-describedby="cancel-label"
-              
-            >
-              Cancel
-            </b-button>
-          </div>
-        </template>
 
-        <!-- <b-button
-          class="c-btn"
-          variant="primary"
-          v-b-toggle="'movie-' + id"
-          @click="getResultMusic(title), saveTitle(title)"
-          >Plus d'infos</b-button
-        > -->
-        
+      <!-- <template v-if="awesome" v-slot:overlay> -->
+      <template v-slot:overlay>
+        <div>
+          <b-button
+            class="m-2"
+            variant="light"
+            v-b-toggle="'movie-' + id"
+            @click="getResultMusic(title), saveTitle(title, description, id, imgName)"
+            >Infos</b-button
+          >
+          <b-button
+            class="m-2"
+            variant="primary"
+            v-b-toggle="'movie-' + id"
+            @click="getResultMusic(title), saveTitle(title)"
+            >Add to list</b-button
+          >
+          <b-button
+            class="m-2"
+            size="lg"
+            pill
+            variant="light"
+            v-b-toggle="'movie-' + id"
+            @click="favoriteMovie(title, description, id, imgName)"
+            ><b-icon class="mt-2" icon="heart-fill" variant="primary"></b-icon
+          ></b-button>
+        </div>
+      </template>
     </b-overlay>
-    <Sidebar :title="movieTitle" :description="description" :id="id" />
+    <Sidebar :title="title" :description="description" :id="id" />
   </div>
 </template>
 
@@ -52,7 +62,7 @@
 import axios from "axios";
 import Sidebar from "@/components/Sidebar.vue";
 import { Vue, Component, Prop, PropSync } from "vue-property-decorator";
-import { state, mutations, actions } from "../store/store";
+import store from "../store/store";
 
 @Component({
   name: "Card",
@@ -61,6 +71,7 @@ import { state, mutations, actions } from "../store/store";
   }
 })
 export default class Card extends Vue {
+  // @Prop(Boolean) private imgName?: boolean;
   @Prop(String) private imgName?: string;
   @Prop(String) private title!: string;
   @Prop(String) private description!: string;
@@ -69,22 +80,12 @@ export default class Card extends Vue {
 
   private show?: boolean = false;
 
-  mounted(){
-    this.$nextTick(()=>{
-      console.log(this.$refs.cancel) // returns undefined ???
-    });
-  }
-
-  // mounted() {
-  //     console.log(this.$refs.cancel);
-  // }
-
-  private onShown(){
+  private onShown() {
     const child: any = this.$refs.cancel;
-    child.focus();
+    child.focus({ preventScroll: true });
   }
 
-  private onHidden(){
+  private onHidden() {
     const child: any = this.$refs.show;
     child.focus();
   }
@@ -105,22 +106,35 @@ export default class Card extends Vue {
       });
   }
 
-  private saveTitle(value: string) {
-    actions.title(value);
+  //Methods
+  private saveTitle(title: string, description:string, id:number, imgName:string) {
+    this.$store.commit('setMovieInfos', {title, description, id, imgName})
   }
 
+  private favoriteMovie(title: string, description:string, id:number, imgName:string) {
+    this.$store.commit('setFavoriteMovie', {title, description, id, imgName})
+  }
+
+
+  //Getters
   private get movieTitle(): string {
-      return state.movieInfo.title[1]
+    return this.$store.getters.getMovieTitle
   }
-
+  private get movieDesc(): string {
+    return this.$store.getters.getMovieDesc
+  }
+  private get movieId(): number {
+    return this.$store.getters.getMovieId
+  }
+  private get movieImg(): string {
+    return this.$store.getters.getMovieImg
+  }
 
   // private set movieTitle(newValue: string) {
   //   let names = newValue.split(' ')
   //   this.first = names[0]
   //   this.last = names[names.length - 1]
   // }
-
-
 
   // private get computedTest(): string {
   //     return 'test';

@@ -7,11 +7,17 @@
         v-model="query"
         @keyup="getResult(query)"
       ></b-form-input>
-      <b-input-group-append>
+      <!-- <b-input-group-append>
         <b-button variant="info">
           <b-icon icon="x" />
         </b-button>
-      </b-input-group-append>
+      </b-input-group-append> -->
+        <router-link to="/about">
+          <b-button size="lg" class="ml-2" variant="success">
+            Mes favoris
+            <b-icon class="ml-1" icon="heart-fill" variant="light"></b-icon>
+          </b-button>
+        </router-link>
     </b-input-group>
     <div class="d-flex justify-content-center flex-wrap w-100">
       <div v-for="result in results" :key="result.id">
@@ -32,7 +38,6 @@ import Card from "@/components/Card.vue";
 import { State, Action, Getter, namespace } from "vuex-class";
 import Component from "vue-class-component";
 import { Vue, Prop } from "vue-property-decorator";
-import { mutations, actions } from "../store/store";
 
 @Component({
   name: "Form",
@@ -44,6 +49,10 @@ export default class Form extends Vue {
   private results: Record<string, any> = [];
   private query?: string;
 
+  /**
+   * @param {string} query - keyword for API
+   * @return {Object} - list of movies according to the keyword
+   */
   private getResult(query: string) {
     axios
       .get(
@@ -52,11 +61,6 @@ export default class Form extends Vue {
       .then(response => {
         this.results = response.data.results;
       });
-    // this.results.map((result: Record<string, any>) => {
-
-    //   actions.title(result.original_title);
-    
-    // });
   }
 }
 </script>
