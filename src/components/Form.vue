@@ -7,12 +7,7 @@
         v-model="query"
         @keyup="getResult(query)"
       ></b-form-input>
-      <!-- <b-input-group-append>
-        <b-button variant="info">
-          <b-icon icon="x" />
-        </b-button>
-      </b-input-group-append> -->
-        <router-link to="/about">
+        <router-link to="/favoris">
           <b-button size="lg" class="ml-2" variant="success">
             Mes favoris
             <b-icon class="ml-1" icon="heart-fill" variant="light"></b-icon>
@@ -23,7 +18,7 @@
       <div v-for="result in results" :key="result.id">
         <Card
           :id="result.id"
-          :title="result.original_title"
+          :title="result.title"
           :imgName="result.poster_path"
           :description="result.overview"
         />

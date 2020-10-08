@@ -1,16 +1,3 @@
-
-// import store from "@/store/store";
-/**
- * When namespaced is set to true, contents of the module is automatically namedspaced based on name.
- * Vuex allows adding modules to store dynamically after store is created, we set it to true.
- * store is the Vuex store to which we need to insert our module.
- */
-// @Module({
-//   namespaced: true,
-//   name: "movie",
-//   store,
-// })
-
 export const Movie = {
   state: {
     movieInfos : {
@@ -23,33 +10,44 @@ export const Movie = {
   },
 
   actions: {
-    // movieInfos({commit}, payload){
-    //   commit('setMovieInfos', payload);
-    // }
-
     favoriteMovie(context, {payload}){
       context.commit('setFavoriteMovie', payload)
     }
-
+    // movieInfos({commit}, payload){
+    //   commit('setMovieInfos', payload);
+    // }
+    
   },
 
   mutations: {
-    setMovieInfos( state, {title, description, id, imgName}){
-      console.log(title, description, id, imgName)
-      
-      state.movieInfos.description = description;
-      state.movieInfos.title = title;
-      state.movieInfos.id = id;
-      state.movieInfos.imgName = imgName;
-    },
-    
-    setFavoriteMovie(state, {title, description, id, imgName}){
+    /**
+     * Check first if movie title already exist, and push into object only if it doesn't exist on array
+     * @param {object} state - State you want to input movie to (for movieArray)
+     * @param {àbject} param1 - Movie parameters for "movieInfos" state 
+     */
+    SET_FAVORITE_MOVIE: function(state, {title, description, id, imgName}){
       const found = state.moviesArray.some(index => index.title === title);
-      // console.log(found)
       if (!found) state.moviesArray.push({title, description, id, imgName})
-      // state.moviesArray.push({title, description, id, imgName})
+    },
+
+    /**
+     * Check if movie title already exist in state object index, and delete it
+     * @param {object} state - State you want to delete movie to
+     * @param {string} title - String refere to movie title you want to delete
+     */
+    DELETE_FAVORITE_MOVIE: function(state, title){
+      const index = state.moviesArray.findIndex(movie => movie.title === title);
+      state.moviesArray.splice(index, 1);
+    },
+
+    // setMovieInfos( state, {title, description, id, imgName}){
+    //   console.log(title, description, id, imgName)
       
-    }
+    //   state.movieInfos.description = description;
+    //   state.movieInfos.title = title;
+    //   state.movieInfos.id = id;
+    //   state.movieInfos.imgName = imgName;
+    // },
   },
 
   getters: {
@@ -73,19 +71,4 @@ export const Movie = {
       return state.movieInfos.imgName;
     },
   }
-
-  // public movie = ''
-  // // public movie: string[] = []
-
-  // @Mutation
-  // private ADD_MOVIE(movie: string) {
-  //   this.movie = movie
-  //   // this.movie.push(movie);
-  // }
-
-  // @Action
-  // public AddMovie(movie: string) {
-  //   return this.ADD_MOVIE(movie)
-  // }
-
 }
